@@ -17,6 +17,12 @@ Correr migraciones
 npx prisma migrate dev
 ```
 
+Ejecutar seed
+
+```bash
+npm run seed
+```
+
 Levantar servidor
 
 ```bash
