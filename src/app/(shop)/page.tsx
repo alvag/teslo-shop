@@ -1,9 +1,23 @@
-import { ProductGrid, Title } from '@/components';
-import { initialData } from '@/seed/seed';
+import { Pagination, ProductGrid, Title } from '@/components';
+import { getPaginatedProductsWithImages } from '@/actions';
+import { redirect } from 'next/navigation';
 
-const products = initialData.products;
+interface HomeProps {
+    searchParams: {
+        page?: string;
+    };
+}
 
-export default function Home() {
+export default async function Home( { searchParams }: HomeProps ) {
+    const page = searchParams.page ? parseInt( searchParams.page ) : 1;
+
+    const { products, totalPages } = await getPaginatedProductsWithImages( { page } );
+
+    if ( products.length === 0 ) {
+        redirect( '/' );
+    }
+
+
     return (
         <>
             <Title title="Tienda"
@@ -12,6 +26,8 @@ export default function Home() {
             />
 
             <ProductGrid products={ products }/>
+
+            <Pagination totalPages={ totalPages }/>
         </>
     );
 }
