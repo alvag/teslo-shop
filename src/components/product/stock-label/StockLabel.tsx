@@ -19,11 +19,23 @@ export const StockLabel = ( { slug }: StockLabelProps ) => {
     const getStock = async () => {
         const stock = await getStockBySlug( slug );
         setStock( stock );
+        setIsLoading( false );
     };
 
     return (
-        <h1 className={ `${ titleFont.className } antialiased font-bold text-lg` }>
-            Stock: { stock }
-        </h1>
+        <>
+            {
+                isLoading
+                    ?
+                    <h1 className={ `${ titleFont.className } antialiased font-bold text-lg animate-pulse bg-gray-200` }>
+                        &nbsp;
+                    </h1>
+
+                    : <h1 className={ `${ titleFont.className } antialiased font-bold text-lg` }>
+                        Stock: { stock }
+                    </h1>
+            }
+
+        </>
     );
 };
