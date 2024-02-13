@@ -1,5 +1,5 @@
 export const revalidate = 604800; // 7 days
-
+import { Metadata, ResolvingMetadata } from 'next';
 import { FC } from 'react';
 import { notFound } from 'next/navigation';
 import { titleFont } from '@/config/fonts';
@@ -9,6 +9,29 @@ import { getProductBySlug } from '@/actions';
 interface ProductProps {
     params: {
         slug: string;
+    };
+}
+
+export async function generateMetadata(
+    { params }: ProductProps,
+    parent: ResolvingMetadata,
+): Promise<Metadata> {
+    const slug = params.slug;
+
+    // fetch data
+    const product = await getProductBySlug( slug );
+
+    // optionally access and extend (rather than replace) parent metadata
+    // const previousImages = (await parent).openGraph?.images || []
+
+    return {
+        title: product?.title ?? 'Product not found',
+        description: product?.description ?? 'Product not found',
+        openGraph: {
+            title: product?.title ?? 'Product not found',
+            description: product?.description ?? 'Product not found',
+            images: [ `/products/${ product?.images[ 1 ] }` ],
+        },
     };
 }
 
